@@ -1,5 +1,5 @@
 # Algorithm
 Algorithm Coding
 
-data structure
+Data structure template class.
 Algorithm question and answers.
