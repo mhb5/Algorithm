@@ -21,4 +21,13 @@ int s(const vector<int>& c, int l, int r) {
   return std::min(f(c, l+1, r), f(c, l, r-1));
 }
 
+寄信问题（每人只能寄一封信，收一封信，且不能寄信给自己，求不同人数的寄信方案）
+思路：当A寄信给B时，可以把二人看作一个人（寄一封，收一封），后续就变为n-1寄信问题和n-2（A和B互相寄）寄信问题了.
+
+int letter(int n) {
+  if (n <= 2) {
+    return n - 1;
+  }
+  return (n-1) * (letter(n-1) + letter(n-2));
+}
 
