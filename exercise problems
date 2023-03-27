@@ -1,0 +1,24 @@
+给定一个整型数组arr，代表数值不同的纸牌连成一条线，玩家A和B依次拿走每张纸牌，A先拿，B后拿，且每次只能拿走最左或最右的纸牌，A和B都绝顶聪明，请返回最后获胜者的分数。
+
+int scoreCd(const vector<int>& c) {
+  if (c.empty()) {
+    return 0;
+  }
+  return std::max(f(c, 0, c.size()-1), s(c, 0, c.size() - 1));
+}
+//开始抽牌，自己能拿到的最大分数
+int f(const vector<int>& c, int l, int r) {
+  if (l == r) {
+    return c[l];
+  }
+  return std::max(c[l]+s(c, l+1, r), c[r]+s(c, l, r-1));
+}
+//开始抽牌，对家能拿到的最大分数
+int s(const vector<int>& c, int l, int r) {
+  if (l == r) {
+    return 0;
+  }
+  return std::min(f(c, l+1, r), f(c, l, r-1));
+}
+
+
