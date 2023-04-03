@@ -31,3 +31,50 @@ int letter(int n) {
   return (n-1) * (letter(n-1) + letter(n-2));
 }
 
+N皇后问题。
+int NQun(int n) {
+  if (n < 1 || n > 32) {
+    return 0;
+  }
+  return NQun_proc(n, 0, 0, 0, 0);
+}
+
+int NQun_proc(int n, int row, int l, int m, int r) {
+  if (row == n) {
+    return 1;
+  }
+  int ret = 0;
+  int limit = (l | m | r);
+  for (int i = 0; i < n; ++i) {
+    if (getBit(limit, i) == 0) {
+      int newl = (l | (1 << i)) << 1;
+      int newr = (r | (1 << i)) >> 1;
+      ret += NQun_proc(n, row+1, newl, setBit(m, i), newr);
+    }
+  }
+  return ret;
+}
+//最优解
+int NQunBst(int n) {
+  if (n < 1 || n > 32) {
+    return 0;
+  }
+  int limit = n == 32 ? -1 : ((1 << n) - 1);
+  return NQunBst_proc(0, 0, 0, limit);
+}
+
+int NQunBst_proc(int l, int m, int r, int limit) {
+  if (m == limit) {
+    return 1;
+  }
+  int ret = 0;
+  int pos = limit & (~(l | m | r));
+  while (pos != 0) {
+    auto mostRight = pos & (~pos + 1);
+    pos -= mostRight;
+    ret += NQunBst_proc((l|mostRight) << 1, m|mostRight, (r|mostRight)>>1, limit);
+  }
+  return ret;
+}
+
+  
