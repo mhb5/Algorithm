@@ -77,4 +77,60 @@ int NQunBst_proc(int l, int m, int r, int limit) {
   return ret;
 }
 
-  
+给定一个数组，其中每个元素代表一定数目的金钱，数目都为正且不重复，允许重复使用每个数据项。给定一个num值，求有多少种方法组成num。
+
+//递归写法
+int mny(const vector<int>& arr, int num) {
+  if (arr.empty() || num < 1) {
+    return -1;
+  }
+  return mny_proc(arr, 0, num);
+}
+
+int mny_proc(const vector<int>& arr, int idx, int rest) {
+  if (idx == arr.size()) {
+    return rest == 0 ? 1 : 0;
+  }
+  int ret = 0;
+  for (int c = 0; arr[idx] * c <= rest; ++c) {
+    ret += mny_proc(arr, idx+1, rest-arr[idx]*c);
+  }
+  return ret;
+}
+
+//动态规划
+int mny_dp(const vector<int>& arr, int aim) {
+  if (arr.empty() || aim < 1) {
+    return -1;
+  }
+  vector<vector<int>> dp(arr.size() + 1, vector<int>(aim + 1, 0));
+  dp[arr.size()][0] = 1;
+  for (int i = arr.size() - 1; i >= 0; --i) {
+    for (int j = 0; j <= aim; ++j) {
+      for (int c = 0; arr[i] * c <= j; ++c) {
+        dp[i][j] += dp[i + 1][j-arr[i]*c];
+      }//end for
+    }//end for
+  }//end for
+  return dp[0][aim];
+}
+
+//动态规划优化
+int mny_dp_adv(const vector<int>& arr, int aim) {
+  if (arr.empty() || aim < 1) {
+    return -1;
+  }
+  vector<vector<int>> dp(arr.size() + 1, vector<int>(aim + 1, 0));
+  dp[arr.size()][0] = 1;
+  for (int i = arr.size() - 1; i >= 0; --i) {
+    for (int j = 0; j <= aim; ++j) {
+      dp[i][j] = dp[i+1][j];
+      if (arr[i] <= j) {
+        dp[i][j] += dp[i][j - arr[i]];
+      }
+    }//end for
+  }//end for
+  return dp[0][aim];
+}
+
+
